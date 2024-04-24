@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+  <head>
+    <title>Galaga</title>
+    <link rel="stylesheet" href="../Gaems.css" type="text/css">
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+   
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+
+
+
+
+
+  <body style=" margin: 0 auto;">
+
+    <nav>
+     
+        
+      <li style="list-style:  none;" >
+
+        <p style="padding-top: 25px; ">Games</p>
+
+        <ul>
+          <li><a href="../FlappyBird/FlappyBird.html">FlappyBird</a></li>
+          <li><a href="../AngryBird/AngryBird.html">AngryBird</a></li>
+          <li><a href="../Gallag/Gallag.html">Galaga</a></li>
+          <li><a href="../NightMare/NightMare.html">NightMare</a></li>
+          <li><a href="../Omok/Omok.html">Omok</a></li>
+          <li><a href="../Othello/Othello.html">Othello</a></li>
+          <li><a href="../Tetris/Tetris.html">Tetris</a></li>
+         
+          
+
+        </ul>
+
+      </li>
+
+      
+       
+    </nav>
+
+
+   <main>
+
+    <section class="GaemName"><p>GALAGA</p></section>
+     
+
+    <section class="GaemIntroduction">
+
+        <div id="unity-container" style="width: 50%;">
+          <canvas id="unity-canvas"></canvas>
+          <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+              <div id="unity-progress-bar-full"></div>
+            </div>
+          </div>
+          <div id="unity-warning"> </div>
+          <div id="unity-footer" style="display: none;">
+            <div id="unity-webgl-logo"></div>
+            <div id="unity-fullscreen-button"></div>
+            <div id="unity-build-title">portfolio</div>
+          </div>
+          
+        </div>  
+
+    </section>
+
+
+    <aside>
+
+        <div class="Introduction">
+
+          <div>
+            <p style="font-size: 50px; font-weight: bolder;">Galaga의 핵심 요소</p>
+          </div>
+
+          <div style="padding-top: 40px;">
+            <h2>Bezier Curves</h2>
+
+            <p style="padding-top: 20px;">
+              Galaga와 같은 슈팅 게임을 하다 보면 적들이 곡선 이동으로 등장하거나, 곡선 이동을 하면 플레이어를 공격합니다. <br>
+              저는 여기서 적들의 "자연스러운 곡선이동을 구현" 하는 것이 핵심 요소 중 하나라고 생각합니다. <br>
+
+              <br>
+
+              그래서 곡선 이동을 구현할 방법을 찾아보던 중 Bezier Curves 라는 것을 알게 되었습니다. <br>
+              Bezier Curves에 대한 설명과 공식을 읽어봤을 때 이를 코드로 구현하기 위해 필요한 것은 크게 2가지였습니다.  <br>
+
+              <br>
+              <h3> Bezier Curves를 구현할 전체 위치(Vector3[] Route)  , 곡선 이동경로에 대한 분할 개수(int segmentation)</h3> 
+              그래서 저는 (Vector3[] Route , int segmentation) 이 두 변수를 넣으면 Bezier Curves가 계산이 되어 나오는 함수를 만들었습니다.
+
+              <div style="display: flex; justify-content: space-around; width: 50%; margin-top: 20px; margin-bottom: 20px;  ">
+                <img src="beziercureve1.png" style="width: 40%; height: 300px;">
+                <img src="beziercureve2.png" style="width: 40%; height: 300px">
+              </div>
+              
+              이 함수를 처음 만들었을 때에는 Bezier Curves 하나밖에 계산하지 못했습니다. <br>
+              Vector3[] Route의 안에 들어 있는 변수에 맞춰서 계산식을 하나하나 다시 만들어 줘야 하는 일회용 코드에 불과했습니다. <br>
+
+              <br>
+              제가 만들고 싶었던 코드는 Vector3[] Route , int segmentation 이 두 변수를 넣었을 때 Vector3[] Route의 크기가 2,3,5,100 이든 어떤 상황에서도 쓸 수 있는 
+              <h2>재사용이 가능한 코드를 구현하고 싶었습니다.</h2>
+
+              <br>
+              그래서 Bezier Curves 곡선을 계산하는 공식에서 일정하게 반복되는 구간을 찾아 <br>
+              재사용이 가능한 코드로 바꿈 하는데 성공하였습니다.  
+
+
+              <div style="width: 1000px; margin-top: 20px;">
+                <video src="bizer1.mp4" autoplay loop muted style="width: 300px;"></video>
+                <p>일반적인 Bezier Curves</p>
+                
+              </div>
+
+
+              <div style="width: 1000px; margin-top: 20px;">
+                <video src="bizer2.mp4" autoplay loop muted style="width: 300px;"></video>
+                <p>고리 모양의 Bezier Curves</p>
+                
+              </div>
+
+              <div style="width: 1000PX; margin-top: 20px;">
+                <video src="bizer3.mp4" autoplay loop muted style="width: 300px;"></video>
+                <p>여러 개의 Bezier Curves </p>
+                
+              </div>
+
+
+              <p style=" margin-top: 40px;">
+                그리고 제가 만든 Bezier Curves 코드를 어디에서나 사용이 가능하도록 하기 위하여 
+                <h2>dll 형태로 제작하였습니다.</h2>
+
+                <div style="width: 50%; height: 300px; margin-top: 20px;"><img src="bezier_dll.png" style="width: 100%; height: 100%;">dll 파일에서 함수를 불러오는 사진</div>
+              </p>
+
+
+              <div style="height: 100px;"></div>
+
+              
+        
+            </p>
+
+           
+          </div>
+
+        
+        </div>
+
+       
+         
+
+         
+
+    </aside>
+
+  </main>
+
+
+
+   
+
+
+    
+
+
+
+
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/test.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/test.data.unityweb",
+        frameworkUrl: buildUrl + "/test.framework.js.unityweb",
+        codeUrl: buildUrl + "/test.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "portfolio",
+        productVersion: "0.1",
+        showBanner: unityShowBanner,
+      };
+
+      // By default Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

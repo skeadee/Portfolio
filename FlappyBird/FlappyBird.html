@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en-us">
+ 
+ <head>
+  <title>FlappyBird</title>
+  <link rel="stylesheet" href="../Gaems.css" type="text/css">
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <link rel="shortcut icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+
+
+
+  <body style="margin: 0 auto;">
+
+    <nav>
+     
+        
+      <li style="list-style:  none;" >
+
+        <p style="padding-top: 25px; ">Games</p>
+
+        <ul>
+          <li><a href="../FlappyBird/FlappyBird.html">FlappyBird</a></li>
+          <li><a href="../AngryBird/AngryBird.html">AngryBird</a></li>
+          <li><a href="../Gallag/Gallag.html">Galaga</a></li>
+          <li><a href="../NightMare/NightMare.html">NightMare</a></li>
+          <li><a href="../Omok/Omok.html">Omok</a></li>
+          <li><a href="../Othello/Othello.html">Othello</a></li>
+          <li><a href="../Tetris/Tetris.html">Tetris</a></li>
+         
+          
+
+        </ul>
+
+      </li>
+
+      
+       
+    </nav>
+
+
+
+    
+   <main>
+
+    <section class="GaemName"><p>FLAPPY BIRD</p></section>
+     
+
+    <section class="GaemIntroduction">
+      
+        <div id="unity-container" style="width: 50%;">
+          <canvas id="unity-canvas"></canvas>
+          <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+              <div id="unity-progress-bar-full" ></div>
+            </div>
+          </div>
+          <div id="unity-warning"> </div>
+          <div id="unity-footer" style="display: none;">
+            <div id="unity-webgl-logo"></div>
+            <div id="unity-fullscreen-button"></div>
+            <div id="unity-build-title">portfolio</div>
+          </div>
+        </div>
+    
+        </div>  
+
+    </section>
+
+
+    <aside>
+
+        <div class="Introduction">
+
+          <div>
+            <p style="font-size: 50px; font-weight: bolder;">Flappy Bird 핵심 요소 </p>
+          </div>
+
+          <h2 style="margin-top: 20px;">
+            중력(Rigidbody2D) , 충돌(Collider2D)에 대한 이해
+          </h2>
+
+          <!-- <a href="https://github.com/skeadee/FlappyBird" target="_blank"><h2>(소스 코드)</h2></a>  --> 
+   
+          <div id="Sort" style="padding-top: 40px;">
+
+
+
+            <div id="Sort" style="margin-top: 40px;">
+
+              <div><h2>핵심요소</h2></div>
+
+              <div style="width: 500px; height: 300px; margin-bottom: 20px;">
+                <video src="flappyClick.mp4" loop autoplay muted style="width: 100%; height: 100%;"></video>
+              </div>
+
+          
+              <div>
+                <h3>Player 설명</h3><br>
+
+                화면을 클릭 시 Player가 일정 높이로 올라가야 합니다.<br>
+                유니티에서는 다양하게 힘을 오브젝트에 힘을 주는 방식이 있는데, 저는 Rigidbody 기능에 있는 ForceMode 기능 중 하나를 선택하여 이를 구현했습니다.
+                <a href="https://docs.unity3d.com/kr/530/ScriptReference/ForceMode.html" target="_blank">(ForceMode란?) </a><br>
+                제가 원하는 것은 클릭을 <strong>"한번"</strong>  했을 때 Player가 올라가는 것 임으로 즉각적인 힘을 주는 Impulse를 사용하였습니다. <br><br>
+
+
+                그리고 현재 Player는 중력을 영향을 계속 받고 있기에 클릭을 하여 힘을 준다 하여도 클릭하는 타이밍에 따라 점프의 높이가 각각 다릅니다. <br>
+                그래서 항상 일정한 높이의 점프를 위해 Rigidbody에 있는 velocity(속도)를 클릭할 때마다 Vector2.zero로 바꾸어 클릭 시 항상 일정한 점프 높이를 구현하였습니다. <br><br>
+
+                마지막으로 클릭 시 연속으로 점프가 되는 것을 막기 위해 bool Delay라는 변수를 선언 후 <br>
+                Delay가 false 형태라면 점프 함수가 실행되지 않도록 만들고 반대로 true라면 점프 함수를 실행 후 true 형태로 바꾸고 <br>
+                <strong>"Coroutine 함수"</strong>를 사용하여 일정 시간 후 Delay를 false 형태로 바꿔주는 함수를 실행하도록 만들었습니다. <br><br>
+
+                Player 입장에서 필요한 요소들을 생각하여 코드를 작성하였습니다. <br>
+                <!-- (자세한 설명은 소스코드 Bird.cs 참조해 주세요) --> 
+                
+
+              </div>
+          
+             
+            </div>
+
+
+
+
+            <div id="Sort" style="margin-top: 60px; height: 700px;">
+
+                <div><h3>장애물</h3></div>
+
+                <div style="height: 400px; width: 150px;margin-bottom: 20px ;"> <img src="flappyColumn.png"> 기둥 프리펩</div>
+
+              
+                <div>
+                    <h3>장애물 설명</h3> <br>
+
+                    장애물은 2가지로 나누었습니다. <br>
+                    Player가 충돌 시 데미지를 입어야 하는 "기둥" <br>
+                    Player가 통과 할때 점수를 추가해야하는 "통과 지점" <br><br>
+
+                    이 2개의 오브젝트에서 중요한 점은 <strong>Player와 충돌 시 "물리적인 작용"을 해야 하는가?</strong> 입니다. <br>
+                    만약 Player가 장애물과 충돌 했는데 Player가 기둥을 통과하지 않고 그대로 장애물에 밀려 맵 밖으로 나가면 안되기에 <br>
+                    장애물 오브젝트의 Collider  기능 중 Is Trigger기능을 true로 바꿔서 <strong>충돌 감지는 하되 물리적인 작용은 x</strong> 상태로 변경하였습니다.
+                </div>  
+
+
+                
+
+            </div>
+
+            <!--
+
+              <div style="margin-top: 60px;">
+              <h2>게임을 만들면서 어려웠던 점</h2> <br>
+
+              게임을 만들면서 어려웠던 점은 <strong>"설계"</strong>였던거 같습니다. <br><br>
+              처음 이 게임을 만들 때에는 "충돌을 감지하려면 오브젝트에 Collider가 있어야 하고 적어도 다른 하나의 오브젝트에는 Rigidbody가 있어야 한다" <br>
+              라는 말을 들었음에도 불구하고 게임을 처음 제작 시에는 모든 오브젝트에 Rigidbody2D 와 Collider2D를 추가하여 게임을 만들었습니다. <br>
+              그렇게 만드니 게임이 쓸데없이 무거워 질 뿐만 아니라 게임이 정상적으로 돌아가지 않았습니다. <br><br>
+
+  
+             </div>
+
+             -->
+            
+
+
+           
+
+            
+           
+           
+            
+        </div>
+
+       
+         
+
+         
+
+    </aside>
+
+  </main>
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/FlappyBird.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/FlappyBird.data.unityweb",
+        frameworkUrl: buildUrl + "/FlappyBird.framework.js.unityweb",
+        codeUrl: buildUrl + "/FlappyBird.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "portfolio",
+        productVersion: "0.1",
+        showBanner: unityShowBanner,
+      };
+
+      // By default Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

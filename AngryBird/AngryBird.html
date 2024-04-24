@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+  <head>
+    <title>AngryBird</title>
+    <link rel="stylesheet" href="../Gaems.css" type="text/css">
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+
+
+
+
+
+  <body style=" margin: 0 auto;">
+
+    <nav>
+      
+        
+      <li style="list-style:  none;" >
+
+        <p style="padding-top: 25px; ">Games</p>
+
+        <ul>
+          <li><a href="../FlappyBird/FlappyBird.html">FlappyBird</a></li>
+          <li><a href="../AngryBird/AngryBird.html">AngryBird</a></li>
+          <li><a href="../Gallag/Gallag.html">Galaga</a></li>
+          <li><a href="../NightMare/NightMare.html">NightMare</a></li>
+          <li><a href="../Omok/Omok.html">Omok</a></li>
+          <li><a href="../Othello/Othello.html">Othello</a></li>
+          <li><a href="../Tetris/Tetris.html">Tetris</a></li>
+         
+          
+
+        </ul>
+
+      </li>
+
+      
+       
+    </nav>
+
+
+   <main>
+
+    <section class="GaemName"><p>ANGRY BIRD</p></section>
+     
+
+    <section class="GaemIntroduction">
+       
+        <div id="unity-container" style="width: 50%;">
+          <canvas id="unity-canvas"></canvas>
+          <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+              <div id="unity-progress-bar-full"></div>
+            </div>
+          </div>
+          <div id="unity-warning"> </div>
+          <div id="unity-footer" style="display: none;">
+            <div id="unity-webgl-logo"></div>
+            <div id="unity-fullscreen-button"></div>
+            <div id="unity-build-title">portfolio</div>
+          </div>
+          
+        </div>  
+
+    </section>
+
+
+    <aside>
+
+          <div class="Introduction">
+
+            <div><p style="font-size: 50px; font-weight: bolder;">Angry Bird 핵심 요소</p></div>
+              
+            <h2 style="margin-top: 20px;"> Ray 와 Vector의 이해, 적 생성 로직 구현 및 코드의 재사용</h2>
+
+            <!-- <a href="https://github.com/skeadee/AngryBird" target="_blank"><h2>(소스 코드)</h2></a> -->
+
+            
+            
+   
+          <div id="Sort" style="margin-top: 40px;">
+
+            <div id="Sort" style="margin-top: 20px;">
+
+                <div><h3>핵심요소</h3></div>
+
+                <div>
+                  <div style="width: 30%; height: 300px; background-color: black;"> <video src="angrybird_Slingshot.mp4" autoplay loop muted style="width: 100%; height: 100%;"></video></div>
+                </div>
+                
+                  
+                <div>
+                  <h3>Player</h3> <br>
+
+                  위 동영상의 핵심 기능은 <br>
+                  <strong>공을 당기는 범위 설정 , 공이 날라가는 지점</strong> 입니다. <br><br>
+
+                  공을 당기는 범위를 구현하기 위해서는 <br>
+                  (마우스의 위치(Vector3) - 공의 처음 위치(Vector3)) = (처음 위치에서 마우스의 방향)Vector3.sqrMagnitude기능을 이용하여 처음 위치에서 마우스가 얼마나 떨어져 있는지의 값을 실수로 받아 사용합니다. <br>
+                  <a href="https://docs.unity3d.com/kr/2019.4/ScriptReference/Vector3-sqrMagnitude.html" target="_blank">(sqrMagnitude란?)</a><br><br>
+
+                  공이 날아가는 지점을 구현하기 구현하기 위해서는 <br>
+                  현재 속도를 비교할 Vector2 ori 선언 후 Vector3.Zero로 초기화를 한 후 Ball의 Rigidbody2D.velocity.sqrMagnitude 값과 ori.sqrMagnitude 값을 서로 비교합니다. <br>
+                  Ball.velocity 값이 ori.velocity 값보다 크다면 아직 최고 속력이 아님으로 ori = Ball으로 변경하여 다시 값을 변경합니다. <br>
+                  반대로 ori.velocity 값이 Ball.velocity 보다 크다면 현재 속도는 최대치의 바로 전 단계임으로 Ball = ori로 설정한 뒤 공이 날라갈수 있도록 구현하였습니다. <br>
+
+                  <br>
+                  <!-- (자세한 설명은 소스코드의 Ball.cs를 참조해 주세요) --> 
+                  
+                </div>
+                
+
+                
+            </div>
+
+
+
+            <div id="Sort" style="margin-top: 60px;">
+
+              <div><h3>적 구조물 생성 로직</h3></div>
+
+              <div id="Sort" style="height: 350px;">
+                <div style="display: flex; justify-content: space-between; width: 80%;">
+
+                  <img src="angry_1.png" style="width: 30%; height: 300px; margin-top: 20px; ">
+                  <img src="angry_2.png"  style="width: 30%; height: 300px; margin-top: 20px;">
+                  <img src="angry_3.png"  style="width: 30%; height: 300px; margin-top: 20px;">
+  
+                </div>
+
+                <p> 게임 시작 , 재시작시 맵의 랜덤 구성 </p>
+                  
+              </div>
+
+             
+              <div style="margin-top: 20px;">
+
+                게임 실행 시 항상 구조물이 다르게 나오는데 <br>
+                이를 구현하기 위해 필요한 변수 값(가로의 최대 길이 , 가로 이동 크기  , 세로 이동 크기 등등)을 받아서 게임 마다 적이 랜덤으로 재생성되는 로직을 <strong>직접</strong> 만들어 보았습니다. <br>
+                코드는 별로 어렵지 않은 코드이지만 이런 작은 로직이라도 제가 직접 만들고 수정해 보는 경험이 나중에는 큰 도움이 될거라고 생각합니다.  <br><br>
+                
+       
+                <!-- (자세한 설명은 소스코드의 Ball.cs를 참조해 주세요) --> 
+
+              </div>
+
+
+
+
+            </div>
+
+
+            
+       
+
+
+
+
+
+
+           
+          </div>
+
+       
+         
+
+         
+
+    </aside>
+
+  </main>
+
+
+
+   
+
+
+    
+
+
+
+
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/test.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/test.data.unityweb",
+        frameworkUrl: buildUrl + "/test.framework.js.unityweb",
+        codeUrl: buildUrl + "/test.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "portfolio",
+        productVersion: "0.1",
+        showBanner: unityShowBanner,
+      };
+
+      // By default Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,236 @@
+  <!DOCTYPE html>
+  <html lang="en-us">
+    <head>
+      <title>NightMare</title>
+      <link rel="stylesheet" href="../Gaems.css" type="text/css">
+
+
+      <meta charset="utf-8">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <link rel="shortcut icon" href="TemplateData/favicon.ico">
+      <link rel="stylesheet" href="TemplateData/style.css">
+    </head>
+
+
+
+    <body style="margin:  0 auto;">
+
+      <nav>
+
+        <li style="list-style:  none;" >
+
+          <p style="padding-top: 25px; ">Games</p>
+
+          <ul>
+            <li><a href="../FlappyBird/FlappyBird.html">FlappyBird</a></li>
+            <li><a href="../AngryBird/AngryBird.html">AngryBird</a></li>
+            <li><a href="../Gallag/Gallag.html">Galaga</a></li>
+            <li><a href="../NightMare/NightMare.html">NightMare</a></li>
+            <li><a href="../Omok/Omok.html">Omok</a></li>
+            <li><a href="../Othello/Othello.html">Othello</a></li>
+            <li><a href="../Tetris/Tetris.html">Tetris</a></li>
+            
+
+          </ul>
+
+        </li>
+
+
+
+      </nav>
+
+
+      <main>
+
+
+        <section class="GaemName"><p>NIGHTMARE</p></section>
+
+        <section class="GaemIntroduction">
+
+          <div id="unity-container" class="unity-desktop">
+            <canvas id="unity-canvas" width=800 height=600></canvas>
+            <div id="unity-loading-bar">
+              <div id="unity-logo"></div>
+              <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full"></div>
+              </div>
+            </div>
+            <div id="unity-warning"> </div>
+            <div id="unity-footer" style="display: none;">
+              <div id="unity-webgl-logo"></div>
+              <div id="unity-fullscreen-button"></div>
+              <div id="unity-build-title">portfolio</div>
+            </div>
+          </div>
+
+
+        </section>
+
+
+        <aside>
+
+          <div><p style="font-size: 50px; font-weight: bolder; margin-left: 150px; margin-top: 30px;">NightMare 핵심 요소</p></div>
+
+          <h2 style="margin-top: 20px; margin-left: 150px;">Ray , Raycast , 회전(Rocation ,  Quaternion, Euler) 대한 이해</h2>
+
+          <!--  <a href="https://github.com/skeadee/NightMare" target="_blank"><h2>(소스 코드)</h2></a>  -->
+
+
+          <div id="Sort" style="margin-top: 40px; height: 600px; margin-left: 150px;">
+
+              <h2>player의 회전</h2>
+
+              <video src="NightMare_Roc.mp4" autoplay loop muted  style="width: 500px; height: 400px;"></video>
+
+              <p style="margin-top: 20px;">
+                위 동영상의 원리는 <br>
+                마우스의 위치에 Ray를 쏴서 값을 구한 후 <br>
+                (마우스의 위치 - Player의 위치)를 해서 Player가 마우스를 바라 보는 "방향" 값을 구한 후 <br>
+                Rigidbody의 MoveRotation를 사용하여 회전값을 변경하였습니다. <br><br>
+
+                <!-- (자세한 내용은 소스 코드 PlyerMovement.cs를 참조해 주세요)      -->               
+              </p>
+              
+            
+          </div>
+
+
+          <div id="Sort" style="margin-top: 60px; margin-left: 150px;">
+
+            <h2>총알 궤적</h2>
+            <video src="NightMareShooting.mp4" autoplay loop muted style="width: 300px; height: 400px;"></video>
+
+            <p>
+              위 동영상의 원리는 <br>
+              마우스 클릭 시 (Player 위치 , Player.forward) = Ray를 선언 후 <br>
+              if (Physics.Raycast())를 통하여 Ray가 맞은 물체가 있는지 없는지 체크 <br>
+              만약 Ray가 맞은게 있다면 맞은 위치까지만 총알 궤적을 생성 , 맞지 않았다면 최대 사거리로 총알 궤적 생성 <br>
+              맞은 오브젝트에 접근해 특정 함수가 있다면 실행( [ex] 총알에 맞은 적 데미지 입는 함수) <br><br>
+              
+
+                <!-- (자세한 내용은 소스 코드 PlyerMovement.cs를 참조해 주세요)      -->    
+              </p>
+          </div>
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+        </aside>
+
+
+      </main>
+
+      
+
+
+
+      <script>
+
+
+        var container = document.querySelector("#unity-container");
+        var canvas = document.querySelector("#unity-canvas");
+        var loadingBar = document.querySelector("#unity-loading-bar");
+        var progressBarFull = document.querySelector("#unity-progress-bar-full");
+        var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+        var warningBanner = document.querySelector("#unity-warning");
+
+        // Shows a temporary message banner/ribbon for a few seconds, or
+        // a permanent error message on top of the canvas if type=='error'.
+        // If type=='warning', a yellow highlight color is used.
+        // Modify or remove this function to customize the visually presented
+        // way that non-critical warnings and error messages are presented to the
+        // user.
+        function unityShowBanner(msg, type) {
+          function updateBannerVisibility() {
+            warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+          }
+          var div = document.createElement('div');
+          div.innerHTML = msg;
+          warningBanner.appendChild(div);
+          if (type == 'error') div.style = 'background: red; padding: 10px;';
+          else {
+            if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+            setTimeout(function() {
+              warningBanner.removeChild(div);
+              updateBannerVisibility();
+            }, 5000);
+          }
+          updateBannerVisibility();
+        }
+
+        var buildUrl = "Build";
+        var loaderUrl = buildUrl + "/NightMare.loader.js";
+        var config = {
+          dataUrl: buildUrl + "/NightMare.data.unityweb",
+          frameworkUrl: buildUrl + "/NightMare.framework.js.unityweb",
+          codeUrl: buildUrl + "/NightMare.wasm.unityweb",
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: "DefaultCompany",
+          productName: "portfolio",
+          productVersion: "0.1",
+          showBanner: unityShowBanner,
+        };
+
+        // By default Unity keeps WebGL canvas render target size matched with
+        // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+        // Set this to false if you want to decouple this synchronization from
+        // happening inside the engine, and you would instead like to size up
+        // the canvas DOM size and WebGL render target sizes yourself.
+        // config.matchWebGLToCanvasSize = false;
+
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          // Mobile device style: fill the whole browser client area with the game canvas:
+
+          var meta = document.createElement('meta');
+          meta.name = 'viewport';
+          meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+          document.getElementsByTagName('head')[0].appendChild(meta);
+          container.className = "unity-mobile";
+
+          // To lower canvas resolution on mobile devices to gain some
+          // performance, uncomment the following line:
+          // config.devicePixelRatio = 1;
+
+          canvas.style.width = window.innerWidth + 'px';
+          canvas.style.height = window.innerHeight + 'px';
+
+          unityShowBanner('WebGL builds are not supported on mobile devices.');
+        } else {
+          // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+          canvas.style.width = "100%";
+          canvas.style.height = "100%";
+        }
+
+        loadingBar.style.display = "block";
+
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = () => {
+          createUnityInstance(canvas, config, (progress) => {
+            progressBarFull.style.width = 100 * progress + "%";
+          }).then((unityInstance) => {
+            loadingBar.style.display = "none";
+            fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          }).catch((message) => {
+            alert(message);
+          });
+        };
+        document.body.appendChild(script);
+      </script>
+    </body>
+  </html>

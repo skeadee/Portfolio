@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+
+
+
+  <head>
+
+
+    <title>Othello</title>
+    <link rel="stylesheet" href="../Gaems.css" type="text/css">
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+
+
+  </head>
+
+
+
+
+
+  <body style="margin:  0 auto;">
+
+    <nav>
+
+      <li style="list-style:  none;" >
+
+        <p style="padding-top: 25px; ">Games</p>
+
+        <ul>
+          <li><a href="../FlappyBird/FlappyBird.html">FlappyBird</a></li>
+          <li><a href="../AngryBird/AngryBird.html">AngryBird</a></li>
+          <li><a href="../Gallag/Gallag.html">Galaga</a></li>
+          <li><a href="../NightMare/NightMare.html">NightMare</a></li>
+          <li><a href="../Omok/Omok.html">Omok</a></li>
+          <li><a href="../Othello/Othello.html">Othello</a></li>
+          <li><a href="../Tetris/Tetris.html">Tetris</a></li>
+          
+
+        </ul>
+
+      </li>
+
+
+      
+
+
+    </nav>
+
+    <main>
+
+      <section class="GaemName"><p>OTHELLO</p></section>
+
+      <section class="GaemIntroduction">
+
+        <div id="unity-container" class="unity-desktop">
+          <canvas id="unity-canvas" width=800 height=600></canvas>
+          <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+              <div id="unity-progress-bar-full"></div>
+            </div>
+          </div>
+          <div id="unity-warning"> </div>
+          <div id="unity-footer" style="display: none;">
+            <div id="unity-webgl-logo"></div>
+            <div id="unity-fullscreen-button"></div>
+            <div id="unity-build-title">portfolio</div>
+          </div>
+        </div>
+
+
+      </section>
+      
+
+
+      <aside>
+
+
+        <div class="Introduction">
+
+          <div><p style="font-size: 50px; font-weight: bolder;">오델로의 핵심 요소</p></div>
+  
+          <h2 style="margin-top: 20px;"></h2>
+  
+          <div id="Sort" style="margin-top: 40px; height: 400px;">
+  
+            <div>
+              <strong>나만의 로직, 동적 라이브러리 활용 및 기능 추가</strong> 
+            </div>
+  
+            <div style="display: flex; justify-content: space-between; width: 650px;">
+              <img src="othello_ex.png" style="width: 300px; height: 300px;">
+            </div>
+  
+            <div>
+              오델로 : 돌을 놓으려면 한 방향으로 <strong>"다른"</strong> 색깔의 돌이 있어야 돌을 놓을 수 있고, 규칙이 적용됩니다. <br>
+            </div>
+             
+           
+          </div>
+  
+  
+          <div style="margin-top: 40px;">
+          오델로에서 가장 중요한 규칙은 <br><br>
+          1. 돌을 놓을 때 현재 색깔과 "반대" 되는 색깔이 옆 칸에 존재하는가? <br>
+          2. 현재 색깔과 "같은" 색깔의 돌이 한 칸 이상 띄워져 있는가? <br>
+          3. 중간에 돌이 연속으로 이어져 있는가? <br><br>
+
+          이렇게 3가지입니다. <br><br>
+
+          1번은 오목을 만들 때 DLL 파일에 기능을 구현하여 따로 만들 필요가 없었습니다.<br>
+          2번은 1번 함수를 사용하여 받은 방향에 다른 0이 아닌 다른 값이 있는가? -> 있다면 True를 반환,없다면 False반환 하는 함수를 구현. <br>
+          DLL파일에 추가 후 <br><br>
+
+          
+          <strong> DLL 파일</strong>을 이용하여 게임을 다시 제작하였습니다. <br>
+          이 게임을 처음 만들 때는 유니티 이해도 미숙, 코드의 잘못된 설계 등등 여러 가지 이유로 2달 정도 걸렸지만 <br>
+          현재 게임을 다시 만들 때 걸린 시간은 3일 정도가 걸렸습니다. 
+      
+          </div>
+
+      </aside>
+
+
+
+    </main>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/Othello.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/Othello.data.unityweb",
+        frameworkUrl: buildUrl + "/Othello.framework.js.unityweb",
+        codeUrl: buildUrl + "/Othello.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "portfolio",
+        productVersion: "0.1",
+        showBanner: unityShowBanner,
+      };
+
+      // By default Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+      }
+
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,199 @@
+*{
+    margin: 0px auto;
+    padding: 0px;
+    box-sizing: border-box;
+    background-color: rgb(253, 243, 243);
+
+
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
+
+}
+
+div
+{
+    margin: 0;
+    padding: 0;
+}
+
+
+nav
+{  /* 맨 위에 창 크기 및 정렬 */
+    width: 60%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav p
+{  /* 맨 위에 창 안에 박스 */
+    width: 20%;
+    height: 100%;
+    margin: 0;
+
+
+    padding-top: 25px;
+    font-size: 20px;
+    font-weight: bolder; 
+}
+
+
+section
+{
+    width: 60%;
+    height: 600px;
+
+    display: flex;
+    
+    /* background-color: aqua; */
+}
+
+section .sec_1
+{
+    width: 100%;
+    height: 100%;
+
+    border: 10px white solid;
+    background-color: yellow;
+
+   
+}
+
+
+
+.sec_2 div
+{
+    width: 100%;
+    height: 50%;
+
+    border: 10px white solid;
+    background-color: aqua;
+}
+
+div.GameType_txt
+{
+    width: 100%;
+    height: 200px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding-top: 60px;
+    background-color: rgb(186, 196, 240)
+
+}
+
+#GameType{
+    width: 60%;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+#GameType ul{
+    width: 100%; 
+    height: 100px;
+    
+    list-style: none;
+
+    display: flex;
+   
+}
+
+#GameType ul li
+{
+   width: 20%;
+   height: 100%;
+   
+   text-align: center;
+   font-size: 20px;
+   font-weight: bolder;
+
+   padding-top: 35px;
+}
+
+#GameType ul li:hover 
+{
+    color: rgb(255, 148, 25);
+    border-bottom: 8px rgb(255, 148, 25) solid;
+}
+
+#GameType ul li:hover div {
+    visibility: visible;
+}
+
+
+
+#GameType ul li div{
+    width: 100%;
+    height: 100%;
+   
+    position: absolute;
+    top: 100px;
+    visibility: hidden;
+    left: 0;
+    color: black; 
+
+    display: flex;
+    flex-wrap: wrap;
+    
+}   
+
+#GameType ul li div div{
+    width: 25%;
+    height: 200px;
+    
+    margin-top: 20px;
+    padding: 20px;
+    position: static;
+   
+}
+
+
+.AllGames_txt
+{
+    position: absolute; 
+    right: 0; 
+    bottom: 0; 
+    background-color: rgba(255, 255, 255, 0);
+    color: white;
+
+    padding-right: 20px;
+    font-size: 100px;
+    font-weight: bolder;
+}
+
+
+.sec_1:hover
+{
+    transform: scale(1.05);
+    transition: 0.5s;
+}
+
+.sec_1:not(:hover)
+{
+    transition: 0.5s;
+}
+
+.Games div:hover
+{
+    transform: scale(1.1);
+    transition: 0.5s;
+}
+
+.Games div:not(:hover)
+{
+    transition: 0.5s;
+}
+
+.Games div a
+{
+    width: 100%; 
+    height: 100%; 
+    text-decoration: none; 
+    color: black;
+}
+
+
+
+
